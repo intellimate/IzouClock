@@ -28,7 +28,7 @@ public class AlarmRepeatSettings {
     public AlarmRepeatSettings(String key, Context context) {
         this.context = context;
         eventsToFire = new ArrayList<>();
-        getSettings(context.getPropertiesAssistant().getProperties(key));
+        getSettings(context.getPropertiesAssistant().getProperty(key));
     }
 
     /**

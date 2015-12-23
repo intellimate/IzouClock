@@ -14,12 +14,12 @@ alarmActivityState = true
 # automatically. If your event ID is not found, the default event ID is also added.
 # You can add as many eventIDs as you want.
 # alarmSettings MUST be in the name of your alarm settings, else your alarm settings will not be found.
-# EXAMPLE: alarmSettings1 = monday;true;15;30;00;IZOUCLOCK_EVENT_ID;IZOU_ALARM
+# EXAMPLE: alarmSettings1 = monday;true;15;30;00;intellimate_izou_addon_izouclock
 #          alarmSettings2 = tuesday;false;8;30;00
 
 # Enter the ID of the audio player that should be used to play the sound - the default is set to:
-# jundl77.izou.izousound.outputplugin.AudioFilePlayer
-audioPlayerID = jundl77.izou.izousound.outputplugin.AudioFilePlayer
+# org.intellimate.izou.addon.izousound.outputplugin.AudioFilePlayer
+audioPlayerID = org.intellimate.izou.addon.izousound.outputplugin.AudioFilePlayer
 
 #
 # -------------

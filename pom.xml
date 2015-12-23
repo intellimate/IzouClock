@@ -7,7 +7,7 @@
     <groupId>org.intellimate.izou.addon.izouclock</groupId>
     <artifactId>izouclock</artifactId>
     <packaging>jar</packaging>
-    <version>1.5</version>
+    <version>1.7</version>
     <name>Izou Clock</name>
 
     <properties>
