@@ -1,4 +1,4 @@
-package jundl77.izou.izouclock;
+package org.intellimate.izou.addon.izouclock;
 
 import leanderk.izou.tts.outputextension.TTSData;
 import leanderk.izou.tts.outputplugin.TTSOutputPlugin;

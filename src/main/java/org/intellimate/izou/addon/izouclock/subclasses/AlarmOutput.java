@@ -1,6 +1,6 @@
-package jundl77.izou.izouclock.subclasses;
+package org.intellimate.izou.addon.izouclock.subclasses;
 
-import jundl77.izou.izouclock.ClockAddOn;
+import org.intellimate.izou.addon.izouclock.ClockAddOn;
 import jundl77.izou.izousound.TrackInfoGenerator;
 import org.intellimate.izou.sdk.Context;
 import org.intellimate.izou.sdk.frameworks.music.player.TrackInfo;

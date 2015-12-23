@@ -1,7 +1,7 @@
-package jundl77.izou.izouclock;
+package org.intellimate.izou.addon.izouclock;
 
-import jundl77.izou.izouclock.subclasses.AlarmActivator;
-import jundl77.izou.izouclock.subclasses.AlarmRepeatSettings;
+import org.intellimate.izou.addon.izouclock.subclasses.AlarmActivator;
+import org.intellimate.izou.addon.izouclock.subclasses.AlarmRepeatSettings;
 import org.intellimate.izou.sdk.Context;
 import org.intellimate.izou.sdk.activator.Activator;
 import org.intellimate.izou.sdk.events.CommonEvents;

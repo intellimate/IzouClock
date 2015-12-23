@@ -1,4 +1,4 @@
-package jundl77.izou.izouclock;
+package org.intellimate.izou.addon.izouclock;
 
 import org.intellimate.izou.addon.AddOnModel;
 import org.intellimate.izou.main.Main;

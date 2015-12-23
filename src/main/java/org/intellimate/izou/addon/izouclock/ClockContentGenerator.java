@@ -1,6 +1,6 @@
-package jundl77.izou.izouclock;
+package org.intellimate.izou.addon.izouclock;
 
-import jundl77.izou.izouclock.subclasses.AlarmOutput;
+import org.intellimate.izou.addon.izouclock.subclasses.AlarmOutput;
 import org.intellimate.izou.events.EventModel;
 import org.intellimate.izou.identification.Identification;
 import org.intellimate.izou.identification.IdentificationManager;

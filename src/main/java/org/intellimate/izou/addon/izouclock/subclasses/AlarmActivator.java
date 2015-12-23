@@ -1,4 +1,4 @@
-package jundl77.izou.izouclock.subclasses;
+package org.intellimate.izou.addon.izouclock.subclasses;
 
 import org.intellimate.izou.sdk.Context;
 
