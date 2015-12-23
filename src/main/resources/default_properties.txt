@@ -1,0 +1,83 @@
+#
+# ----------
+# ALARM DATA
+# ----------
+#
+# To deactivate the alarm, change to false
+alarmActivityState = true
+
+# RepeatSettings are in the form of:
+# alarmSettingsNUMBER = day;state;hours;min;seconds;eventToActivate1;eventToActivate2;eventToActivate3
+# where state is the repeat state (so true for repeat, false for only 1)
+# What events can be activated are found in the PopularProperties.properties file in Izou. In order to add an event,
+# just add the eventID (key) as the eventToActivate. If nothing is added, "IZOU_ALARM" (or izou.alarm) will be added
+# automatically. If your event ID is not found, the default event ID is also added.
+# You can add as many eventIDs as you want.
+# alarmSettings MUST be in the name of your alarm settings, else your alarm settings will not be found.
+# EXAMPLE: alarmSettings1 = monday;true;15;30;00;IZOUCLOCK_EVENT_ID;IZOU_ALARM
+#          alarmSettings2 = tuesday;false;8;30;00
+
+# Enter the ID of the audio player that should be used to play the sound - the default is set to:
+# jundl77.izou.izousound.outputplugin.AudioFilePlayer
+audioPlayerID = jundl77.izou.izousound.outputplugin.AudioFilePlayer
+
+#
+# -------------
+# RINGTONE DATA
+# -------------
+#
+# If a ringtone exists and should be played, change to true
+ringtoneActivityState = false
+
+# Enter the name of the audio file that is to be used as a ringtone (it has to be in the wav format -
+# that means it needs a .wav extension)
+audioFileName = null
+
+# The place in the audio file where to start the ringtone-playback (in milliseconds)
+startPointAudioFile = 0
+
+# The place in the audio file where to end the ringtone-playback (in milliseconds)
+durationAudioFile = 0
+
+#
+# -------------
+# PRESENCE DATA
+# -------------
+#
+# If the event should be fired until the person is present, set fireUntilPresent to true
+fireUntilPresent = false
+
+#
+# -------------
+# TTS DATA
+# -------------
+#
+# Below is the syntax for greetings for the alarm in the form of:
+# language_sentenceType_ID_(optional)randomizeId's
+#
+# Randomized ID means that among all gretings with the same name yet different randomized IDs, one is chosen at
+# random.
+#
+# Language is the language de, the sentenceType should usually always be p (phrase)
+# you can use the following variables:
+#   $hour24 = hour of the day in 24-hour system
+#   $hour12 = hour of the day in 12-hour system
+#   $min    = minute of the day
+#   $state  = AM or PM
+# They have to be on their own, meaning no characters but spaces
+# should come before or after them. Correct spelling is imperative!
+de_p_wakeUpMessageMorning_1 = Wach auf! Es ist schon $hour24 Uhr $min.
+de_p_wakeUpMessageMorning_2 = Aufwachen! Es ist $hour24 Uhr $min.
+de_p_wakeUpMessageMorning_3 = Guten morgen, zeit aufzustehen, es ist schon $hour24 Uhr $min.
+de_p_wakeUpMessageMorning_4 = Ich wünsche dir einen herzlichen guten morgen, heute um $hour24 Uhr $min.
+de_p_wakeUpMessageMorning_5 = Steh doch endlich auf, es ist $hour24 Uhr $min.
+
+en_p_wakeUpMessageMorning_1 = Wake up! It's $hour12 $min $state.
+en_p_wakeUpMessageMorning_2 = It is $hour12 $min $state , you gotta wake up now.
+en_p_wakeUpMessageMorning_3 = So bro, wanna get outta your bed? It's $hour12 $min $state.
+en_p_wakeUpMessageMorning_4 = Hey, wake up there! It's $hour12 $min $state.
+en_p_wakeUpMessageMorning_5 = Hello and good morning! It's $hour12 $min $state so wake up now!
+
+de_p_wakeUpMessageDay = Es ist $hour24 Uhr $min.
+
+en_p_wakeUpMessageDay = It's $hour12 $min $state.
