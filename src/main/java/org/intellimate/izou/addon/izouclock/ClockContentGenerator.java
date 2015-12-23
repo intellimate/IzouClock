@@ -32,7 +32,7 @@ public class ClockContentGenerator extends ContentGenerator {
     /**
      * The default player associated with the clock
      */
-    private final String DEFAULT_PLAYER = "jundl77.izou.izousound.outputplugin.AudioFilePlayer";
+    private final String DEFAULT_PLAYER = "org.intellimate.izou.addon.izousound.outputplugin.AudioFilePlayer";
 
     /**
      * Creates an instance of ContentGenerator
@@ -67,7 +67,7 @@ public class ClockContentGenerator extends ContentGenerator {
         Optional<EventListener> eventListener = EventListener.createEventListener(ClockActivator.CLOCK_EVENT_ID,
                 "This event triggers the alarm in the ClockAddon. It triggers a ringtone with a speach output saying" +
                         "what time it is.",
-                "jundl77_izou_izouclock",
+                "intellimate_izou_addon_izouclock",
                 this);
         return optionalToList(eventListener);
     }
