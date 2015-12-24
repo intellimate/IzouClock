@@ -5,13 +5,15 @@ import org.intellimate.izou.addon.izouclock.subclasses.AlarmRepeatSettings;
 import org.intellimate.izou.sdk.Context;
 import org.intellimate.izou.sdk.activator.Activator;
 import org.intellimate.izou.sdk.events.CommonEvents;
-import org.intellimate.izou.sdk.frameworks.presence.consumer.PresenceEventUser;
 import org.intellimate.izou.sdk.properties.PropertiesAssistant;
 import org.intellimate.izou.system.file.FileSubscriber;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.function.Consumer;
 
@@ -21,7 +23,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
  * Activator based on a time. You can set a time when this activator should be fired in the properties file of this
  * addOn.
  */
-public class ClockActivator extends Activator implements FileSubscriber, PresenceEventUser {
+public class ClockActivator extends Activator implements FileSubscriber {
     /**
      * The ID of the ClockActivator
      */
@@ -74,19 +76,7 @@ public class ClockActivator extends Activator implements FileSubscriber, Presenc
             alarmRepeatMap.put(alarmName, true);
         if (alarmRepeatMap.get(alarmName) || repeatSetting) {
             alarmRepeatMap.put(alarmName, repeatSetting);
-
-//            Properties properties = getContext().getPropertiesAssistant().getProperties();
-//            boolean fireUntilPresent = Boolean.parseBoolean(properties.getProperty("fireUntilPresent"));
-//            boolean fireOnPresent = Boolean.parseBoolean(properties.getProperty("fireOnPresent"));
-
             fire(CommonEvents.Type.RESPONSE_TYPE, eventsToFire);
-
-//            if (fireOnPresent) {
-//                nextPresence(true, false).thenAccept(event -> {
-//                    StopMusic.createStopMusic(source, target)
-//                            .ifPresent(this::fire);
-//                });
-//            }
         }
     }
 
