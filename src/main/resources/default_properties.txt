@@ -46,6 +46,10 @@ durationAudioFile = 0
 # Set the number of times the sound should be played if not present
 soundPlayCounter = 10
 
+# Set whether it should be very likely that the user is present or whether it can be a rough guess that the user is
+# present
+strictPresence = true
+
 # Below are a few options to have the alarm interact with the presence interface in Izou. However make sure that
 # one option is set to true and the other option is set to false, or that both are set to false. If both options
 # are set to true, the first one (fireUntilPresent) will be chosen and the second one (fireUntilAbsent) will be ignored.

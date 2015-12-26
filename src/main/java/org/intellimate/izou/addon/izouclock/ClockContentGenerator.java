@@ -97,6 +97,7 @@ public class ClockContentGenerator extends ContentGenerator implements PresenceE
         Properties properties = getContext().getPropertiesAssistant().getProperties();
         final boolean fireUntilPresent = Boolean.parseBoolean(properties.getProperty("fireUntilPresent"));
         final boolean fireUntilAbsent = Boolean.parseBoolean(properties.getProperty("fireUntilAbsent"));
+        final boolean strictPresence = Boolean.parseBoolean(properties.getProperty("strictPresence"));
         int soundPlayCounterTemp = 10;
         try {
             soundPlayCounterTemp = Integer.parseInt(properties.getProperty("soundPlayCounter"));
@@ -108,9 +109,9 @@ public class ClockContentGenerator extends ContentGenerator implements PresenceE
 
         getContext().getThreadPool().getThreadPool().submit(() -> {
             if (fireUntilPresent) {
-                fireUntilPresent(source, alarm, audioPlayerID, soundPlayCounter);
+                fireUntilPresent(source, alarm, audioPlayerID, soundPlayCounter, strictPresence);
             } else if (fireUntilAbsent) {
-                fireUntilAbsent(source, alarm, audioPlayerID, soundPlayCounter);
+                fireUntilAbsent(source, alarm, audioPlayerID, soundPlayCounter, strictPresence);
             }
         });
     }
@@ -122,11 +123,12 @@ public class ClockContentGenerator extends ContentGenerator implements PresenceE
      * @param alarm the output alarm that should be played
      * @param audioPlayerID the id of the audio player that should be used to play the alarm
      * @param soundPlayCounter the number of times the sound should be played if not present
+     * @param strictPresence true if it should be very likely that the user was near, else false
      */
     private void fireUntilAbsent(Optional<Identification> source, AlarmOutput alarm, String audioPlayerID,
-                                 int soundPlayCounter) {
+                                 int soundPlayCounter, boolean strictPresence) {
         AtomicBoolean present = new AtomicBoolean(true);
-        nextLeaving(false).thenAccept(presenceEvent -> {
+        nextLeaving(strictPresence).thenAccept(presenceEvent -> {
             if (source.isPresent()) {
                 present.set(false);
                 IdentificationManager.getInstance()
@@ -164,11 +166,12 @@ public class ClockContentGenerator extends ContentGenerator implements PresenceE
      * @param alarm the output alarm that should be played
      * @param audioPlayerID the id of the audio player that should be used to play the alarm
      * @param soundPlayCounter the number of times the sound should be played if not present
+     * @param strictPresence true if it should be very likely that the user was near, else false
      */
     private void fireUntilPresent(Optional<Identification> source, AlarmOutput alarm, String audioPlayerID,
-                                  int soundPlayCounter) {
+                                  int soundPlayCounter, boolean strictPresence) {
         AtomicBoolean present = new AtomicBoolean(false);
-        nextPresence(false, false).thenAccept(presenceEvent -> {
+        nextPresence(strictPresence, false).thenAccept(presenceEvent -> {
             if (source.isPresent()) {
                 present.set(true);
                 IdentificationManager.getInstance()
