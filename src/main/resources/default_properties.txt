@@ -48,14 +48,14 @@ soundPlayCounter = 10
 
 # Below are a few options to have the alarm interact with the presence interface in Izou. However make sure that
 # one option is set to true and the other option is set to false, or that both are set to false. If both options
-# are set to true, the first one (fireUntilPresent) will be chosen and the second one (fireWhilePresent) will be ignored.
+# are set to true, the first one (fireUntilPresent) will be chosen and the second one (fireUntilAbsent) will be ignored.
 #
 # If the alarm event should be fired until the user is present, set fireUntilPresent to true
 fireUntilPresent = false
 
-# If the alarm event should be fired while the user is absent and until the user returns, set fireWhilePresent to
+# If the alarm event should be fired until the user is absent, set fireUntilAbsent to
 # true.
-fireWhilePresent = false
+fireUntilAbsent = false
 
 #
 # -------------
