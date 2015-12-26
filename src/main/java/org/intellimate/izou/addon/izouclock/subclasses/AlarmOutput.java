@@ -1,7 +1,7 @@
 package org.intellimate.izou.addon.izouclock.subclasses;
 
 import org.intellimate.izou.addon.izouclock.ClockAddOn;
-import jundl77.izou.izousound.TrackInfoGenerator;
+import org.intellimate.izou.addon.izousound.TrackInfoGenerator;
 import org.intellimate.izou.sdk.Context;
 import org.intellimate.izou.sdk.frameworks.music.player.TrackInfo;
 
@@ -35,23 +35,28 @@ public class AlarmOutput extends Alarm {
         }
 
         TrackInfoGenerator trackInfoGenerator = new TrackInfoGenerator();
-        int startPoint;
+        int startPoint = 0;
+        int duration = 0;
         int endPoint;
 
         if (ringtoneState) {
             try {
                 startPoint = Integer.parseInt(properties.getProperty("startPointAudioFile"));
-                endPoint = startPoint + Integer.parseInt(properties.getProperty("durationAudioFile"));
+                duration =  Integer.parseInt(properties.getProperty("durationAudioFile"));
             } catch (NumberFormatException e) {
                 getContext().getLogger().error("Start or end value for track info is not an integer, setting length of " +
                         "track to full length");
                 startPoint = -1;
-                endPoint = -1;
+                duration = -1;
             }
         } else {
             audioFileName = null;
-            startPoint = 0;
-            endPoint = 0;
+        }
+
+        if (duration == -1) {
+            endPoint = -1;
+        } else {
+            endPoint = startPoint + duration;
         }
 
         this.ringtone = trackInfoGenerator.generatFileTrackInfo(audioFileName, startPoint, endPoint);

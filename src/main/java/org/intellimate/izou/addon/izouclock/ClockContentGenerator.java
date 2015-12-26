@@ -12,6 +12,7 @@ import org.intellimate.izou.sdk.contentgenerator.EventListener;
 import org.intellimate.izou.sdk.frameworks.music.events.StartMusicRequest;
 import org.intellimate.izou.sdk.frameworks.music.events.StopMusic;
 import org.intellimate.izou.sdk.frameworks.presence.consumer.PresenceEventUser;
+import org.intellimate.izou.sdk.frameworks.presence.consumer.PresenceResourceUser;
 import org.intellimate.izou.sdk.resource.Resource;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Content Generator for IzouClock.
  */
-public class ClockContentGenerator extends ContentGenerator implements PresenceEventUser {
+public class ClockContentGenerator extends ContentGenerator implements PresenceEventUser, PresenceResourceUser {
     /**
      * The ID of the ClockContentGenerator
      */
@@ -68,6 +69,8 @@ public class ClockContentGenerator extends ContentGenerator implements PresenceE
             event.lifecycleCallback(EventLifeCycle.ENDED);
         }
 
+        actOnPresence(identification, alarm, audioPlayerID);
+
         // Doesnt matter what is returned, because TTS data is not generated here, so object will do
         return optionalToList(createResource(RESOURCE_ID, new Object()));
     }
@@ -90,70 +93,107 @@ public class ClockContentGenerator extends ContentGenerator implements PresenceE
     /**
      * This method can either fire alarms until the user is present or stop firing alarms unless the user is present
      */
-    public void actOnPresence(Optional<Identification> source, AlarmOutput alarm, String audioPlayerID) {
+    private void actOnPresence(Optional<Identification> source, AlarmOutput alarm, String audioPlayerID) {
         Properties properties = getContext().getPropertiesAssistant().getProperties();
         final boolean fireUntilPresent = Boolean.parseBoolean(properties.getProperty("fireUntilPresent"));
         final boolean fireWhilePresent = Boolean.parseBoolean(properties.getProperty("fireOnPresent"));
+        int soundPlayCounterTemp = 10;
+        try {
+            soundPlayCounterTemp = Integer.parseInt(properties.getProperty("soundPlayCounter"));
+        } catch (NumberFormatException e) {
+            getContext().getLogger().error("Unable to convert soundPlayCounter to an integer, setting to 10");
+        }
+
+        final int soundPlayCounter = soundPlayCounterTemp;
 
         getContext().getThreadPool().getThreadPool().submit(() -> {
             if (fireUntilPresent) {
-                AtomicBoolean present = new AtomicBoolean(false);
-                nextPresence(false, false).thenAccept(presenceEvent -> {
-                    if (source.isPresent()) {
-                        present.set(true);
-                        IdentificationManager.getInstance()
-                                .getIdentification(audioPlayerID)
-                                .flatMap(target -> StopMusic.createStopMusic(source.get(), target))
-                                .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
-                    }
-                });
-                while (!present.get()) {
-                    IdentificationManager.getInstance()
-                            .getIdentification(audioPlayerID)
-                            .flatMap(target -> StartMusicRequest.createStartMusicRequest(source.get(), target,
-                                    alarm.getRingtone()))
-                            .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        error("Unable to sleep", e);
-                    }
-                }
+                fireUntilPresent(source, alarm, audioPlayerID, soundPlayCounter);
             } else if (fireWhilePresent) {
-                AtomicBoolean present = new AtomicBoolean(false);
-                nextLeaving(false).thenAccept(presenceEvent -> {
-                    if (source.isPresent()) {
-                        IdentificationManager.getInstance()
-                                .getIdentification(audioPlayerID)
-                                .flatMap(target -> StartMusicRequest.createStartMusicRequest(source.get(), target,
-                                        alarm.getRingtone()))
-                                .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
-                    }
-                });
-                nextPresence(false, false).thenAccept(presenceEvent -> {
-                    if (source.isPresent()) {
-                        IdentificationManager.getInstance()
-                                .getIdentification(audioPlayerID)
-                                .flatMap(target -> StartMusicRequest.createStartMusicRequest(source.get(), target,
-                                        alarm.getRingtone()))
-                                .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
-                    }
-                });
-                while (present.get()) {
-                    present.set(true);
-                    IdentificationManager.getInstance()
-                            .getIdentification(audioPlayerID)
-                            .flatMap(target -> StopMusic.createStopMusic(source.get(), target))
-                            .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        error("Unable to sleep", e);
-                    }
-                }
+                fireWhilePresent(source, alarm, audioPlayerID, soundPlayCounter);
             }
         });
+    }
+
+    /**
+     * This method keeps the alarm working while the user is present, it stops when the user leaves
+     *
+     * @param source the id of the source of the event (so this id)
+     * @param alarm the output alarm that should be played
+     * @param audioPlayerID the id of the audio player that should be used to play the alarm
+     * @param soundPlayCounter the number of times the sound should be played if not present
+     */
+    private void fireWhilePresent(Optional<Identification> source, AlarmOutput alarm, String audioPlayerID,
+                                  int soundPlayCounter) {
+        AtomicBoolean present = new AtomicBoolean(false);
+        nextLeaving(false).thenAccept(presenceEvent -> {
+            if (source.isPresent()) {
+                present.set(false);
+                IdentificationManager.getInstance()
+                        .getIdentification(audioPlayerID)
+                        .flatMap(target -> StopMusic.createStopMusic(source.get(), target))
+                        .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
+            }
+        });
+
+        int i = 0;
+        while (present.get() && i < soundPlayCounter) {
+            IdentificationManager.getInstance()
+                    .getIdentification(audioPlayerID)
+                    .flatMap(target -> StopMusic.createStopMusic(source.get(), target))
+                    .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
+            try {
+                long duration = 29000;
+                if (alarm.getRingtone().getDuration().isPresent()) {
+                    duration = alarm.getRingtone().getDuration().get();
+                }
+                Thread.sleep(duration + 1000);
+            } catch (InterruptedException e) {
+                error("Unable to sleep", e);
+            }
+            i++;
+        }
+    }
+
+    /**
+     * This method keeps the alarm working while the user is absent, it stops when the user arrives
+     *
+     * @param source the id of the source of the event (so this id)
+     * @param alarm the output alarm that should be played
+     * @param audioPlayerID the id of the audio player that should be used to play the alarm
+     * @param soundPlayCounter the number of times the sound should be played if not present
+     */
+    private void fireUntilPresent(Optional<Identification> source, AlarmOutput alarm, String audioPlayerID,
+                                  int soundPlayCounter) {
+        AtomicBoolean present = new AtomicBoolean(false);
+        nextPresence(false, false).thenAccept(presenceEvent -> {
+            if (source.isPresent()) {
+                present.set(true);
+                IdentificationManager.getInstance()
+                        .getIdentification(audioPlayerID)
+                        .flatMap(target -> StopMusic.createStopMusic(source.get(), target))
+                        .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
+            }
+        });
+
+        int i = 0;
+        while (!present.get() && i < soundPlayCounter) {
+            IdentificationManager.getInstance()
+                    .getIdentification(audioPlayerID)
+                    .flatMap(target -> StartMusicRequest.createStartMusicRequest(source.get(), target,
+                            alarm.getRingtone()))
+                    .ifPresent(event -> getContext().getEvents().distributor().fireEventConcurrently(event));
+
+            try {
+                long duration = 29000;
+                if (alarm.getRingtone().getDuration().isPresent()) {
+                    duration = alarm.getRingtone().getDuration().get();
+                }
+                Thread.sleep(duration + 1000) ;
+            } catch (InterruptedException e) {
+                error("Unable to sleep", e);
+            }
+            i++;
+        }
     }
 }

@@ -76,6 +76,7 @@ public class ClockActivator extends Activator implements FileSubscriber {
             alarmRepeatMap.put(alarmName, true);
         if (alarmRepeatMap.get(alarmName) || repeatSetting) {
             alarmRepeatMap.put(alarmName, repeatSetting);
+
             fire(CommonEvents.Type.RESPONSE_TYPE, eventsToFire);
         }
     }

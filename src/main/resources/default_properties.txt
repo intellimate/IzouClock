@@ -29,8 +29,7 @@ audioPlayerID = org.intellimate.izou.addon.izousound.outputplugin.AudioFilePlaye
 # If a ringtone exists and should be played, change to true
 ringtoneActivityState = false
 
-# Enter the name of the audio file that is to be used as a ringtone (it has to be in the wav format -
-# that means it needs a .wav extension)
+# Enter the name of the audio file that is to be used as a ringtone (it has to be in the wav or mp3 format)
 audioFileName = null
 
 # The place in the audio file where to start the ringtone-playback (in milliseconds)
@@ -44,6 +43,9 @@ durationAudioFile = 0
 # PRESENCE DATA
 # -------------
 #
+# Set the number of times the sound should be played if not present
+soundPlayCounter = 10
+
 # Below are a few options to have the alarm interact with the presence interface in Izou. However make sure that
 # one option is set to true and the other option is set to false, or that both are set to false. If both options
 # are set to true, the first one (fireUntilPresent) will be chosen and the second one (fireWhilePresent) will be ignored.
