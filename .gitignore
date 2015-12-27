@@ -8,13 +8,11 @@ target
 # ---------------
 # Project Files
 # ---------------
-
 *.iml
 
 # ---------------
 # Other
 # ---------------
-
 *.settings
 *.project
 *.classpath
