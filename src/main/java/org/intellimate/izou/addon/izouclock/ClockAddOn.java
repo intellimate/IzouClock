@@ -9,6 +9,10 @@ import org.intellimate.izou.sdk.output.OutputPlugin;
 import ro.fortsoft.pf4j.Extension;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 /**
  * The ClockAddOn is a time based activator that can be set in the properties files.
@@ -46,6 +50,8 @@ public class ClockAddOn extends AddOn {
                 getContext().getLogger().warn("Unable to make IzouClock resource directory", e);
             }
         }
+
+        moveRingtones();
     }
 
     @Override
@@ -82,5 +88,28 @@ public class ClockAddOn extends AddOn {
     @Override
     public String getID() {
         return ADDON_ID;
+    }
+
+    /**
+     * Moves the ringtones from the addOn into the addOn's resource folder in Izou
+     */
+    private void moveRingtones() {
+        String path = getContext().getFiles().getLibLocation() +
+                getContext().getAddOn().getPlugin().getPluginPath() + File.separator + "classes" + File.separator
+                + "ringtones" +  File.separator;
+
+        try {
+            File dir = new File(path);
+            if (dir.isDirectory()) {
+                File[] content = dir.listFiles();
+
+                for (File file : content) {
+                    Files.move(file.toPath(), Paths.get(ADDON_DATA_PATH_LOCAL + file.getName()), StandardCopyOption.REPLACE_EXISTING,
+                            StandardCopyOption.ATOMIC_MOVE);
+                }
+            }
+        } catch (NullPointerException | IOException e) {
+            getContext().getLogger().error("Unable to move file", e);
+        }
     }
 }
