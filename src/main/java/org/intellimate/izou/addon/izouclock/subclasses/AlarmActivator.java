@@ -15,6 +15,7 @@ public class AlarmActivator extends Alarm {
      */
     public static final int TRIGGER_BUFFER = 5;
     private HashMap<String, AlarmRepeatSettings> settingsMap;
+    public static final String ALARM_PREFIX = "alarmSettings";
 
     /**
      * Creates a new AlarmActivator
@@ -70,7 +71,7 @@ public class AlarmActivator extends Alarm {
 
     private List<String> getAlarmRepeats() {
         return getContext().getPropertiesAssistant().getProperties().stringPropertyNames().stream()
-                .filter(prop -> prop.contains("alarmSettings"))
+                .filter(prop -> prop.contains(ALARM_PREFIX))
                 .collect(Collectors.toList());
     }
 

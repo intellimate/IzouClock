@@ -3,7 +3,9 @@ package org.intellimate.izou.addon.izouclock;
 import org.intellimate.izou.addon.AddOnModel;
 import org.intellimate.izou.main.Main;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Use this class to debug
@@ -21,5 +23,11 @@ public class Debug {
         addOns.add(clockAddOn);
         Main main = new Main(addOns);
         //Main.main(null);
+
+        ClockController clockController = ClockController.getInstance();
+        List<String> events = new ArrayList<>();
+        events.add("blub");
+        events.add("paff");
+        clockController.scheduleAlarm("monday", false, 12, 4, 1, events);
     }
 }

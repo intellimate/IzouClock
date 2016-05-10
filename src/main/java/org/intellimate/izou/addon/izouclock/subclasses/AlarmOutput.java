@@ -31,7 +31,7 @@ public class AlarmOutput extends Alarm {
         audioFileName = ClockAddOn.ADDON_DATA_PATH_LOCAL + audioFileName;
 
         if (defaultPlayer) {
-            this.ringtone = new TrackInfo(null, null, null, null, null, audioFileName);
+            ringtone = new TrackInfo(null, null, null, null, null, audioFileName);
         }
 
         TrackInfoGenerator trackInfoGenerator = new TrackInfoGenerator();
@@ -59,7 +59,7 @@ public class AlarmOutput extends Alarm {
             endPoint = startPoint + duration;
         }
 
-        this.ringtone = trackInfoGenerator.generatFileTrackInfo(audioFileName, startPoint, endPoint);
+        ringtone = trackInfoGenerator.generatFileTrackInfo(audioFileName, startPoint, endPoint);
     }
 
     /**

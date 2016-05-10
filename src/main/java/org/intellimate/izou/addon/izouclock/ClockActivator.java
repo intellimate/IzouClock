@@ -10,10 +10,7 @@ import org.intellimate.izou.system.file.FileSubscriber;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ScheduledFuture;
 import java.util.function.Consumer;
 
@@ -46,6 +43,7 @@ public class ClockActivator extends Activator implements FileSubscriber {
         executorService = new LoggedScheduledExecutor(context, 20);
         alarmRepeatMap = new HashMap<>();
         scheduledFutureMap = new HashMap<>();
+        new ClockController(context, this);
     }
 
     /**
@@ -138,7 +136,7 @@ public class ClockActivator extends Activator implements FileSubscriber {
                 try {
                     checkAndFireEvent(alarm, settings.isState(), settings.getEventsToFire());
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    error("Unable to fire alarm: " + alarm);
                 }
             };
 
@@ -176,5 +174,14 @@ public class ClockActivator extends Activator implements FileSubscriber {
         } else {
             return alarmInterval - currentInterval + SECONDS_IN_WEEK;
         }
+    }
+
+    /**
+     * Returns a list with all currently scheduled alarms, by name.
+     *
+     * @return A list with all currently scheduled alarms, by name.
+     */
+    Set<String> getSchedualedAlarms() {
+        return scheduledFutureMap.keySet();
     }
 }

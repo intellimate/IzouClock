@@ -10,7 +10,8 @@ import java.util.GregorianCalendar;
  * abstract. {@link AlarmOutput} and {@link AlarmActivator} both extend if and have their own purposes, one to deal
  * with output and one to deal with the activating process, respectively.
  */
-public abstract class Alarm { // Does not extend AddOnModule because it is repeatedly created during alarm updates,
+public abstract class Alarm {
+    // Does not extend AddOnModule because it is repeatedly created during alarm updates,
     // which causes duplicate registration --> crash
     private Calendar calendar;
     private boolean state;

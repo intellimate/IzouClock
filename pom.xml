@@ -13,12 +13,12 @@
     <properties>
         <plugin.id>org.intellimate.izou.addon.izouclock</plugin.id>
         <plugin.class>org.intellimate.izou.addon.izouclock.ZipFileManager</plugin.class>
-        <plugin.version>2.1</plugin.version>
         <plugin.provider>Julian Brendl</plugin.provider>
         <plugin.dependencies>leanderk.izou.tts, org.intellimate.izou.addon.izousound</plugin.dependencies>
-
         <repo.name>izouclock</repo.name>
         <repo.owner>intellimate</repo.owner>
+        <server.id></server.id>
+        <sdk.version>0.17.0</sdk.version>
         <!-- github server corresponds to entry in ~/.m2/settings.xml -->
         <github.global.server>github</github.global.server>
     </properties>
@@ -189,9 +189,12 @@
                         <manifestEntries>
                             <Plugin-Id>${plugin.id}</Plugin-Id>
                             <Plugin-Class>${plugin.class}</Plugin-Class>
-                            <Plugin-Version>${plugin.version}</Plugin-Version>
+                            <Plugin-Version>${project.version}</Plugin-Version>
                             <Plugin-Provider>${plugin.provider}</Plugin-Provider>
                             <Plugin-Dependencies>${plugin.dependencies}</Plugin-Dependencies>
+                            <Server-ID>${server.id}</Server-ID>
+                            <SDK-Version>${sdk.version}</SDK-Version>
+                            <Artifact-ID>${artifactId}</Artifact-ID>
                         </manifestEntries>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -257,8 +260,8 @@
                 <version>1.1.0</version>
                 <configuration>
                     <repositoryId>${repo.owner}/${repo.name}</repositoryId>
-                    <releaseName>${plugin.version}</releaseName>
-                    <tag>${plugin.version}</tag>
+                    <releaseName>${project.version}</releaseName>
+                    <tag>${project.version}</tag>
                     <artifact>${project.build.directory}/${artifactId}-${version}.zip</artifact>
                     <overwriteArtifact>true</overwriteArtifact>
                 </configuration>

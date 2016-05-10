@@ -9,13 +9,15 @@ alarmActivityState = true
 # RepeatSettings are in the form of:
 # alarmSettingsNUMBER = day;state;hours;min;seconds;eventToActivate1;eventToActivate2;eventToActivate3
 # where state is the repeat state (so true for repeat, false for only 1)
-# What events can be activated are found in the PopularProperties.properties file in Izou. In order to add an event,
+# What events can be activated are found in the local_events.properties file in Izou. In order to add an event,
 # just add the eventID (key) as the eventToActivate. If nothing is added, "IZOU_ALARM" (or izou.alarm) will be added
 # automatically. If your event ID is not found, the default event ID is also added.
 # You can add as many eventIDs as you want.
 # alarmSettings MUST be in the name of your alarm settings, else your alarm settings will not be found.
 # EXAMPLE: alarmSettings1 = monday;true;15;30;00;intellimate_izou_addon_izouclock
 #          alarmSettings2 = tuesday;false;8;30;00
+
+# ClockController Alarms (do not change or remove this line)
 
 # Enter the ID of the audio player that should be used to play the sound - the default is set to:
 # org.intellimate.izou.addon.izousound.outputplugin.AudioFilePlayer

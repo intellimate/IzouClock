@@ -2,8 +2,7 @@ package org.intellimate.izou.addon.izouclock.subclasses;
 
 import org.intellimate.izou.sdk.Context;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * AlarmRepeatSettings contains all the data about when the alarm should be activated, and whether it should be
@@ -18,7 +17,7 @@ public class AlarmRepeatSettings {
     private int hours;
     private int minutes;
     private int seconds;
-    private List<String> eventsToFire;
+    private Set<String> eventsToFire;
 
     /**
      * Creates a new AlarmRepeatSettings object
@@ -27,7 +26,7 @@ public class AlarmRepeatSettings {
      */
     public AlarmRepeatSettings(String key, Context context) {
         this.context = context;
-        eventsToFire = new ArrayList<>();
+        eventsToFire = new HashSet<>();
         getSettings(context.getPropertiesAssistant().getProperty(key));
     }
 
@@ -58,7 +57,9 @@ public class AlarmRepeatSettings {
         if (numberOfParts > 4)
             seconds = analyseTime(parts[4]);
         if (numberOfParts > 5) {
-            eventsToFire.add(checkEventID(parts[5]));
+            for (int i = 5; i < parts.length; i++) {
+                eventsToFire.add(checkEventID(parts[i]));
+            }
         } else {
             if (!eventsToFire.contains("izou.alarm")) {
                 eventsToFire.add("izou.alarm");
@@ -220,6 +221,6 @@ public class AlarmRepeatSettings {
      * @return all events to fire
      */
     public List<String> getEventsToFire() {
-        return eventsToFire;
+        return new ArrayList<>(eventsToFire);
     }
 }

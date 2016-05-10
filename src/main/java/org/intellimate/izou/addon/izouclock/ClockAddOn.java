@@ -1,5 +1,6 @@
 package org.intellimate.izou.addon.izouclock;
 
+import org.intellimate.izou.output.OutputControllerModel;
 import org.intellimate.izou.output.OutputExtensionModel;
 import org.intellimate.izou.sdk.activator.Activator;
 import org.intellimate.izou.sdk.addon.AddOn;
@@ -22,7 +23,7 @@ public class ClockAddOn extends AddOn {
     /**
      * The ID of the ClockAddOn
      */
-    public static final String ADDON_ID = ClockAddOn.class.getCanonicalName();
+    private static final String ADDON_ID = ClockAddOn.class.getCanonicalName();
 
     /**
      * The local data path where external data should be stored (sound files etc.)
@@ -50,7 +51,6 @@ public class ClockAddOn extends AddOn {
                 getContext().getLogger().warn("Unable to make IzouClock resource directory", e);
             }
         }
-
         moveRingtones();
     }
 
@@ -86,6 +86,11 @@ public class ClockAddOn extends AddOn {
     }
 
     @Override
+    public OutputControllerModel[] registerOutputController() {
+        return null;
+    }
+
+    @Override
     public String getID() {
         return ADDON_ID;
     }
@@ -95,7 +100,7 @@ public class ClockAddOn extends AddOn {
      */
     private void moveRingtones() {
         String path = getContext().getFiles().getLibLocation() +
-                getContext().getAddOn().getPlugin().getPluginPath() + File.separator + "classes" + File.separator
+                getContext().getAddOns().getAddOn().getPlugin().getPluginPath() + File.separator + "classes" + File.separator
                 + "ringtones" +  File.separator;
 
         try {
